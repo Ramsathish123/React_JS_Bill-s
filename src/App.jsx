@@ -5,6 +5,7 @@ import Header from "./components/Header/Header";
 import SideBar from "./components/Sidebar/SideBar";
 import Fotter from "./components/Footer/Fotter";
 import Register from "./pages/RegisterPage/Register";
+import "./App.css";
 function App() {
   return (
     <>
