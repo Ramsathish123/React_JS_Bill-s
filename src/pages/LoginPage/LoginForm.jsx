@@ -16,12 +16,14 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate=useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -94,6 +96,7 @@ export default function LoginForm() {
                   bg={"blue.400"}
                   color={"white"}
                   _hover={{ bg: "blue.500" }}
+                  onClick={()=>{navigate("/dashboard")}}
                 >
                   Sign in
                 </Button>
