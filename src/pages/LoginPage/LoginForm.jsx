@@ -96,7 +96,7 @@ export default function LoginForm() {
                   bg={"blue.400"}
                   color={"white"}
                   _hover={{ bg: "blue.500" }}
-                  onClick={()=>{navigate("/dashboard")}}
+                  onClick={()=>{navigate("/stock")}}
                 >
                   Sign in
                 </Button>
