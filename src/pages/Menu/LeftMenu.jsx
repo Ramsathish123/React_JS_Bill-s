@@ -36,7 +36,7 @@ const LeftMenu = () => {
     { icon: FiUser, label: 'Service', href: '/service' },
     { icon: FiMail, label: 'Stock', href: '/stock' },
     { icon: FiSettings, label: 'Expense', href: '/expense' },
-    { icon: FiHelpCircle, label: 'Help', href: '/help' },
+    { icon: FiHelpCircle, label: 'Invoice', href: '/invoice' },
   ];
 
   const toggleMenu = () => {
