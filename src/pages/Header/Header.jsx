@@ -1,83 +1,212 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./Header.css"; // Import your CSS styles
+import React, { useRef } from "react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  Text,
+  Button,
+  IconButton,
+  useColorMode,
+  useColorModeValue,
+  VStack,
+  HStack,
+  useDisclosure,
+  Portal,
+  SlideFade,
+  Icon,
+  Divider
+} from "@chakra-ui/react";
+import {
+  ChevronDownIcon,
+  MoonIcon,
+  SunIcon,
+  EditIcon,
+  SettingsIcon,
+  LockIcon,
+  QuestionOutlineIcon
+} from "@chakra-ui/icons";
+import { FiLogOut } from "react-icons/fi";
+
 const Header = () => {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const profileRef = useRef(null);
 
-  // Mock user data - replace with your actual user data
+  // User data
   const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: "balachandran Chandran",
+    email: "balachandranballu1212@gmail.com",
+    avatar: "https://bit.ly/dan-abramov",
+    role: "Premium Member"
   };
-
-  // Close the dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setIsProfileOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const handleSignOut = () => {
-    // Implement your sign out logic here
     console.log("User signed out");
-    setIsProfileOpen(false);
+    onClose();
   };
 
+  const handleEditProfile = () => {
+    console.log("Edit profile clicked");
+    onClose();
+  };
+
+  // Color values
+  const bg = useColorModeValue("white", "gray.800");
+  const dropdownBg = useColorModeValue("white", "gray.700");
+  const hoverBg = useColorModeValue("gray.50", "gray.600");
+  const borderColor = useColorModeValue("gray.200", "gray.600");
+  const textColor = useColorModeValue("gray.600", "gray.300");
+  const nameColor = useColorModeValue("gray.800", "white");
+  const roleColor = useColorModeValue("blue.500", "blue.300");
+
   return (
-    <header className="header-container">
-      <div className="header-content">
-        {/* Left side of header - can be logo or other elements */}
-        <div className="header-left">
-          <h1>Your Logo</h1>
-        </div>
+    <Box
+      as="header"
+      w="100%"
+      py={3}
+      px={{ base: 4, md: 8 }}
+      bg={bg}
+      boxShadow="sm"
+      position="sticky"
+      top={0}
+      zIndex="sticky"
+      borderBottomWidth="1px"
+      borderColor={borderColor}
+    >
+      <Flex
+        maxW="container.xl"
+        mx="auto"
+        align="center"
+        justify="space-between"
+      >
+        {/* Logo/Brand */}
+        <Heading as="h1" size="lg" fontWeight="bold" letterSpacing="tight">
+     
+        </Heading>
 
-        {/* Right side of header with profile icon */}
-        <div className="header-right" ref={profileRef}>
-          <div
-            className="profile-icon"
-            onClick={() => setIsProfileOpen(!isProfileOpen)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
+        {/* Right side controls */}
+        <HStack spacing={3}>
+          {/* Dark mode toggle */}
+          <IconButton
+            aria-label="Toggle color mode"
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            variant="ghost"
+            borderRadius="full"
+            size="sm"
+          />
 
-          {/* Profile dropdown modal */}
-          {isProfileOpen && (
-            <div className="profile-dropdown">
-              <div className="profile-dropdown-content">
-                <div className="profile-info">
-                  <div className="profile-name">{user.name}</div>
-                  <div className="profile-email">{user.email}</div>
-                </div>
-                <div className="dropdown-divider"></div>
-                <button className="signout-button" onClick={handleSignOut}>
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
+          {/* Profile dropdown */}
+          <Box ref={profileRef}>
+            <Menu isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                rightIcon={<ChevronDownIcon />}
+                px={2}
+                borderRadius="full"
+                size="sm"
+                _hover={{ bg: hoverBg }}
+                _expanded={{ bg: hoverBg }}
+              >
+                <HStack spacing={2}>
+                  <Avatar size="sm" name={user.name} src={user.avatar} />
+                  <Text display={{ base: "none", md: "block" }} fontWeight="medium">
+                    {user.name.split(" ")[0]}
+                  </Text>
+                </HStack>
+              </MenuButton>
+
+              <Portal>
+                <MenuList
+                  minW="300px"
+                  p={0}
+                  border="1px solid"
+                  borderColor={borderColor}
+                  boxShadow="xl"
+                  bg={dropdownBg}
+                >
+                  <SlideFade in={isOpen} offsetY={-10}>
+                    <Box p={4}>
+                      <VStack align="flex-start" spacing={1}>
+                        <HStack spacing={3}>
+                          <Avatar size="md" name={user.name} src={user.avatar} />
+                          <VStack align="flex-start" spacing={0}>
+                            <Text fontWeight="bold" fontSize="md" color={nameColor}>
+                              {user.name}
+                            </Text>
+                            <Text fontSize="sm" color={textColor}>
+                              {user.email}
+                            </Text>
+                            <Text fontSize="xs" color={roleColor} fontWeight="semibold">
+                              {user.role}
+                            </Text>
+                          </VStack>
+                        </HStack>
+                      </VStack>
+                    </Box>
+
+                    <Divider />
+
+                    {/* <VStack spacing={1} p={2}>
+                      <MenuItem
+                        icon={<EditIcon boxSize={4} />}
+                        _hover={{ bg: hoverBg }}
+                        onClick={handleEditProfile}
+                        borderRadius="md"
+                      >
+                        Edit Profile
+                      </MenuItem>
+                      <MenuItem
+                        icon={<SettingsIcon boxSize={4} />}
+                        _hover={{ bg: hoverBg }}
+                        borderRadius="md"
+                      >
+                        Account Settings
+                      </MenuItem>
+                      <MenuItem
+                        icon={<LockIcon boxSize={4} />}
+                        _hover={{ bg: hoverBg }}
+                        borderRadius="md"
+                      >
+                        Privacy & Security
+                      </MenuItem>
+                    </VStack> */}
+
+                    <Divider />
+
+                    <VStack spacing={1} p={2}>
+                      {/* <MenuItem
+                        icon={<QuestionOutlineIcon boxSize={4} />}
+                        _hover={{ bg: hoverBg }}
+                        borderRadius="md"
+                      >
+                        Help & Support
+                      </MenuItem> */}
+                      <MenuItem
+                        icon={<Icon as={FiLogOut} boxSize={4} />}
+                        _hover={{ bg: "blue.50" }}
+                        color="blue.500"
+                        onClick={handleSignOut}
+                        borderRadius="md"
+                      >
+                        Sign Out
+                      </MenuItem>
+                    </VStack>
+                  </SlideFade>
+                </MenuList>
+              </Portal>
+            </Menu>
+          </Box>
+        </HStack>
+      </Flex>
+    </Box>
   );
 };
 
