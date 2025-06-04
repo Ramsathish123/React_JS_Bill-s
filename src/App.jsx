@@ -7,7 +7,6 @@ import Register from "./pages/RegisterPage/Register";
 import "./App.css";
 import LeftMenu from "./pages/Menu/LeftMenu";
 import Dashboard from "./pages/dashboard/dashboard";
-import Stock from "./pages/Stock/stock";
 
 function App() {
   return (
@@ -19,7 +18,7 @@ function App() {
 
         {/* Layout route with nested content */}
         <Route path="/" element={<LeftMenu />}>
-           <Route path="stock" element={<Stock/>} />
+           <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>

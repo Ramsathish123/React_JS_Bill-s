@@ -155,9 +155,11 @@ const LeftMenu = () => {
       {/* Main Content */}
       <Box
         flex="1"
-       
-        transition="margin-left 0.3s ease"
-        p={4}
+        ml={isMobile ? 0 : isMenuOpen ? "220px" : "70px"}
+        transition="margin-left 0.3s"
+        p={{ base: 2, md: 6 }}
+        bg="transparent"
+        minH="100vh"
         overflowY="auto"
       >
         <Outlet />
