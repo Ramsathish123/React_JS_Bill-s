@@ -81,6 +81,10 @@ const Service = () => {
               <Input value={mobileNumber} onChange={e => setMobileNumber(e.target.value)} />
             </FormControl>
             <FormControl mb={3}>
+              <FormLabel>Mobile Modal</FormLabel>
+              <Input value={mobileNumber} onChange={e => setMobileNumber(e.target.value)} />
+            </FormControl>
+            <FormControl mb={3}>
               <FormLabel>Issue</FormLabel>
               <Input value={issue} onChange={e => setIssue(e.target.value)} />
             </FormControl>

@@ -8,7 +8,8 @@ import {
   MenuList,
   MenuItem,
   Text,
-  IconButton
+  IconButton,
+  layout
 } from '@chakra-ui/react';
 import { FiLogOut, FiUser } from 'react-icons/fi';
 
@@ -32,4 +33,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default layout;

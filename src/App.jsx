@@ -10,6 +10,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import Stock from "./pages/Stock/Stock";
 import Expense from "./pages/Expense/Expense";
 import Service from "./pages/Service/Service";
+import Invoice from "./pages/Invoice/Invoice";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
            <Route path="expense" element={<Expense />} />
             <Route path="service" element={<Service />} />
              <Route path="dashboard" element={<Dashboard />} />
+             <Route path="invoice" element={<Invoice />} />
         </Route>
       </Routes>
     </Router>
