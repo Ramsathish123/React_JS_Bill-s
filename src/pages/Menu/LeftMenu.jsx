@@ -21,6 +21,7 @@ import {
   FiHelpCircle,
   FiChevronLeft,
   FiChevronRight,
+  FiFileText,
 } from "react-icons/fi";
 import { Outlet, Link as RouterLink } from "react-router-dom";
 import Header from "../Header/Header";
@@ -32,11 +33,11 @@ const LeftMenu = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const menuItems = [
-    { icon: FiHome, label: 'Home', href: '/dashboard' },
-    { icon: FiUser, label: 'Service', href: '/service' },
-    { icon: FiMail, label: 'Stock', href: '/stock' },
-    { icon: FiSettings, label: 'Expense', href: '/expense' },
-    { icon: FiHelpCircle, label: 'Help', href: '/help' },
+    { icon: FiHome, label: "Home", href: "/dashboard" },
+    { icon: FiUser, label: "Service", href: "/service" },
+    { icon: FiMail, label: "Stock", href: "/stock" },
+    { icon: FiSettings, label: "Expense", href: "/expense" },
+    { icon: FiFileText, label: "Invoice", href: "/invoice" },
   ];
 
   const toggleMenu = () => {
@@ -139,7 +140,7 @@ const LeftMenu = () => {
       </Box>
 
       {/* Main Content */}
-      <Box flex="1" transition="margin-left 0.3s ease"  overflowY="auto">
+      <Box flex="1" transition="margin-left 0.3s ease" overflowY="auto">
         <Header />
         <Outlet />
       </Box>

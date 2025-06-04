@@ -22,41 +22,53 @@ import {
   FormLabel,
   Stack,
   useColorModeValue,
-} from '@chakra-ui/react';
-import { useState } from 'react';
+  Card,
+  CardHeader,
+  CardBody,
+} from "@chakra-ui/react";
+import { useState } from "react";
 
 const Expense = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [invoiceNo, setInvoiceNo] = useState('');
-  const [detail, setDetail] = useState('');
-  const [amount, setAmount] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [invoiceNo, setInvoiceNo] = useState("");
+  const [detail, setDetail] = useState("");
+  const [amount, setAmount] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [expenses, setExpenses] = useState([]);
 
   const handleAddExpense = () => {
-    setExpenses(prev => [
+    setExpenses((prev) => [
       ...prev,
-      { id: Date.now(), invoiceNo, detail, amount: parseFloat(amount) }
+      { id: Date.now(), invoiceNo, detail, amount: parseFloat(amount) },
     ]);
-    setInvoiceNo('');
-    setDetail('');
-    setAmount('');
+    setInvoiceNo("");
+    setDetail("");
+    setAmount("");
     onClose();
   };
 
   const handleSearch = () => {
     // You can implement filtering based on fromDate and toDate
-    console.log('Searching between:', fromDate, toDate);
+    console.log("Searching between:", fromDate, toDate);
   };
 
-  const tableBg = useColorModeValue('white', 'gray.800');
+  const tableBg = useColorModeValue("white", "gray.800");
 
   return (
-    <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
+    <Box
+      p={{ base: 4, md: 8 }}
+      minH="100vh"
+      bg={useColorModeValue("gray.50", "gray.900")}
+    >
       {/* Header and Add Button */}
       <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
-        <Heading size="md" fontWeight="semibold" color="blue.600" fontFamily="'Poppins', sans-serif">
+        <Heading
+          size="md"
+          fontWeight="semibold"
+          color="blue.600"
+          fontFamily="'Poppins', sans-serif"
+        >
           Expense Tracker
         </Heading>
         <Button colorScheme="blue" onClick={onOpen}>
@@ -70,18 +82,18 @@ const Expense = () => {
         mb={6}
         flexWrap="wrap"
         align="center"
-        justify={{ base: 'flex-start', md: 'flex-start' }}
+        justify={{ base: "flex-start", md: "flex-start" }}
       >
         <Input
           type="date"
           value={fromDate}
-          onChange={e => setFromDate(e.target.value)}
+          onChange={(e) => setFromDate(e.target.value)}
           maxW="200px"
         />
         <Input
           type="date"
           value={toDate}
-          onChange={e => setToDate(e.target.value)}
+          onChange={(e) => setToDate(e.target.value)}
           maxW="200px"
         />
         <Button onClick={handleSearch} colorScheme="teal">
@@ -90,34 +102,47 @@ const Expense = () => {
       </Flex>
 
       {/* Expense Table */}
-      <Box
-        bg={tableBg}
-        p={4}
-        rounded="xl"
-        shadow="md"
-        overflowX="auto"
-      >
-        <Table variant="simple" size="md">
-          <Thead bg={useColorModeValue('gray.100', 'gray.700')}>
-            <Tr>
-              <Th>Invoice No</Th>
-              <Th>Description</Th>
-              <Th isNumeric>Amount (₹)</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {expenses.map(item => (
-              <Tr
-                key={item.id}
-                _hover={{ bg: useColorModeValue('gray.50', 'gray.700') }}
-              >
-                <Td>{item.invoiceNo}</Td>
-                <Td>{item.detail}</Td>
-                <Td isNumeric>₹{item.amount.toFixed(2)}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
+      <Box bg={tableBg} p={4} rounded="xl" shadow="md" overflowX="auto">
+        <Card
+          bg={useColorModeValue("white", "gray.800")}
+          borderRadius="xl"
+          boxShadow="sm"
+          borderWidth="1px"
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+          overflow="hidden"
+        >
+          <CardHeader
+            borderBottomWidth="1px"
+            borderColor={useColorModeValue("gray.200", "gray.700")}
+          >
+            <Heading size="md">Expenses</Heading>
+          </CardHeader>
+          <CardBody px={0}>
+            <Box overflowX="auto">
+              <Table variant="simple" size="md">
+                <Thead bg={useColorModeValue("blue.50", "blue.900")}>
+                  <Tr>
+                    <Th>Invoice No</Th>
+                    <Th>Description</Th>
+                    <Th isNumeric>Amount (₹)</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {expenses.map((item) => (
+                    <Tr
+                      key={item.id}
+                      _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}
+                    >
+                      <Td>{item.invoiceNo}</Td>
+                      <Td>{item.detail}</Td>
+                      <Td isNumeric>₹{item.amount.toFixed(2)}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Box>
+          </CardBody>
+        </Card>
         {expenses.length === 0 && (
           <Box textAlign="center" py={6} fontStyle="italic" color="gray.500">
             No expenses recorded.
@@ -137,7 +162,7 @@ const Expense = () => {
                 <FormLabel>Invoice No</FormLabel>
                 <Input
                   value={invoiceNo}
-                  onChange={e => setInvoiceNo(e.target.value)}
+                  onChange={(e) => setInvoiceNo(e.target.value)}
                   placeholder="Enter invoice number"
                 />
               </FormControl>
@@ -145,7 +170,7 @@ const Expense = () => {
                 <FormLabel>Detail</FormLabel>
                 <Input
                   value={detail}
-                  onChange={e => setDetail(e.target.value)}
+                  onChange={(e) => setDetail(e.target.value)}
                   placeholder="Enter description"
                 />
               </FormControl>
@@ -154,7 +179,7 @@ const Expense = () => {
                 <Input
                   type="number"
                   value={amount}
-                  onChange={e => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(e.target.value)}
                   placeholder="Enter amount"
                 />
               </FormControl>

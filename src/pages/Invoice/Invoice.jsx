@@ -14,6 +14,10 @@ import {
   Text,
   useColorModeValue,
   Flex,
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
 } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
@@ -27,7 +31,14 @@ const productDB = {
 
 const Invoice = () => {
   const [rows, setRows] = useState([
-    { id: 1, productId: "", productName: "", rate: "", quantity: "", amount: "" },
+    {
+      id: 1,
+      productId: "",
+      productName: "",
+      rate: "",
+      quantity: "",
+      amount: "",
+    },
   ]);
 
   const productRefs = useRef([]);
@@ -82,10 +93,26 @@ const Invoice = () => {
   const handleRemove = (index) => {
     const updated = [...rows];
     updated.splice(index, 1);
-    setRows(updated.length ? updated : [{ id: 1, productId: "", productName: "", rate: "", quantity: "", amount: "" }]);
+    setRows(
+      updated.length
+        ? updated
+        : [
+            {
+              id: 1,
+              productId: "",
+              productName: "",
+              rate: "",
+              quantity: "",
+              amount: "",
+            },
+          ]
+    );
   };
 
-  const totalAmount = rows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+  const totalAmount = rows.reduce(
+    (sum, row) => sum + Number(row.amount || 0),
+    0
+  );
 
   const bgCard = useColorModeValue("white", "gray.800");
   const borderCard = useColorModeValue("gray.200", "gray.700");
@@ -107,60 +134,135 @@ const Invoice = () => {
         </Text>
 
         <Box overflowX="auto">
-          <Table variant="striped" size="sm" colorScheme="gray">
-            <Thead bg="gray.100">
-              <Tr>
-                <Th>Product ID</Th>
-                <Th>Product Name</Th>
-                <Th>Rate</Th>
-                <Th>Quantity</Th>
-                <Th>Amount</Th>
-                <Th>Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {rows.map((row, index) => (
-                <Tr key={index}>
-                  <Td>
-                    <Input
-                      ref={(el) => (productRefs.current[index] = el)}
-                      value={row.productId}
-                      onChange={(e) => handleInputChange(index, "productId", e.target.value)}
-                      placeholder="Enter ID"
-                      size="sm"
-                    />
-                  </Td>
-                  <Td>
-                    <Input value={row.productName} isReadOnly size="sm" />
-                  </Td>
-                  <Td>
-                    <Input value={row.rate} isReadOnly size="sm" />
-                  </Td>
-                  <Td>
-                    <Input
-                      ref={(el) => (quantityRefs.current[index] = el)}
-                      value={row.quantity}
-                      onChange={(e) => handleInputChange(index, "quantity", e.target.value)}
-                      placeholder="Qty"
-                      size="sm"
-                    />
-                  </Td>
-                  <Td>
-                    <Input value={row.amount} isReadOnly size="sm" />
-                  </Td>
-                  <Td>
-                    <IconButton
-                      icon={<FiTrash2 />}
-                      onClick={() => handleRemove(index)}
-                      size="sm"
-                      aria-label="Remove row"
-                      colorScheme="red"
-                    />
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
+          <Card
+            bg={useColorModeValue("white", "gray.800")}
+            borderRadius="xl"
+            boxShadow="sm"
+            borderWidth="1px"
+            borderColor={useColorModeValue("gray.200", "gray.700")}
+            overflow="hidden"
+          >
+            <CardHeader
+              borderBottomWidth="1px"
+              borderColor={useColorModeValue("gray.200", "gray.700")}
+            >
+              <Heading size="md">Products</Heading>
+            </CardHeader>
+            <CardBody px={0}>
+              <Box overflowX="auto">
+                <Table
+                  variant="simple"
+                  size="sm"
+                  colorScheme={useColorModeValue("gray", "blue")}
+                >
+                  <Thead bg={useColorModeValue("blue.50", "blue.900")}>
+                    <Tr>
+                      <Th>Product ID</Th>
+                      <Th>Product Name</Th>
+                      <Th>Rate</Th>
+                      <Th>Quantity</Th>
+                      <Th>Amount</Th>
+                      <Th>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {rows.map((row, index) => (
+                      <Tr
+                        key={index}
+                        _hover={{
+                          bg: useColorModeValue("gray.50", "gray.700"),
+                        }}
+                      >
+                        <Td>
+                          <Input
+                            ref={(el) => (productRefs.current[index] = el)}
+                            value={row.productId}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "productId",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Enter ID"
+                            size="sm"
+                            borderColor={useColorModeValue(
+                              "gray.300",
+                              "gray.600"
+                            )}
+                            _focus={{
+                              borderColor: "blue.500",
+                              boxShadow: "0 0 0 1px #3182ce",
+                            }}
+                          />
+                        </Td>
+                        <Td>
+                          <Input
+                            value={row.productName}
+                            isReadOnly
+                            size="sm"
+                            bg={useColorModeValue("gray.100", "gray.700")}
+                            borderColor="transparent"
+                          />
+                        </Td>
+                        <Td>
+                          <Input
+                            value={row.rate}
+                            isReadOnly
+                            size="sm"
+                            bg={useColorModeValue("gray.100", "gray.700")}
+                            borderColor="transparent"
+                          />
+                        </Td>
+                        <Td>
+                          <Input
+                            ref={(el) => (quantityRefs.current[index] = el)}
+                            value={row.quantity}
+                            onChange={(e) =>
+                              handleInputChange(
+                                index,
+                                "quantity",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Qty"
+                            size="sm"
+                            borderColor={useColorModeValue(
+                              "gray.300",
+                              "gray.600"
+                            )}
+                            _focus={{
+                              borderColor: "blue.500",
+                              boxShadow: "0 0 0 1px #3182ce",
+                            }}
+                          />
+                        </Td>
+                        <Td>
+                          <Input
+                            value={row.amount}
+                            isReadOnly
+                            size="sm"
+                            bg={useColorModeValue("gray.100", "gray.700")}
+                            borderColor="transparent"
+                          />
+                        </Td>
+                        <Td>
+                          <IconButton
+                            icon={<FiTrash2 />}
+                            onClick={() => handleRemove(index)}
+                            size="sm"
+                            aria-label="Remove row"
+                            colorScheme="red"
+                            variant="ghost"
+                          />
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Box>
+            </CardBody>
+          </Card>
         </Box>
 
         <Flex justify="space-between" mt={6} flexWrap="wrap" gap={4}>
