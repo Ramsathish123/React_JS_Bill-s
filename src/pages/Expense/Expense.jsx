@@ -56,7 +56,7 @@ const Expense = () => {
     <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
       {/* Header and Add Button */}
       <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
-        <Heading fontSize={{ base: '2xl', md: '3xl' }} color="blue.600">
+        <Heading size="md" fontWeight="semibold" color="blue.600" fontFamily="'Poppins', sans-serif">
           Expense Tracker
         </Heading>
         <Button colorScheme="blue" onClick={onOpen}>

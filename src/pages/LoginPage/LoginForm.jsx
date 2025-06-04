@@ -14,6 +14,7 @@ import {
   Text,
   useColorModeValue,
   Image,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -24,12 +25,64 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login submitted:", { email, password, rememberMe });
-    navigate("/stock");
+    setIsLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast({
+          title: "Login failed",
+          description: data.message || "Invalid email or password",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top", // changed from "top-right" to "top"
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Save user data/token if needed
+      // localStorage.setItem("user", JSON.stringify(data.user));
+      // localStorage.setItem("token", data.token);
+
+      toast({
+        title: "Login successful",
+        description: "Redirecting to your dashboard...",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+        position: "top", // changed from "top-right" to "top"
+      });
+
+      setTimeout(() => {
+        navigate("/stock");
+      }, 1000);
+    } catch (error) {
+      console.error("Login error:", error);
+      toast({
+        title: "Connection error",
+        description: "Could not connect to the server. Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top", // changed from "top-right" to "top"
+      });
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -47,7 +100,7 @@ export default function LoginForm() {
         w: "100vw",
         h: "100vh",
         zIndex: 0,
-        bgImage: "url('/bglogin.avif')", // ✅ Image from public folder
+        bgImage: "url('/bglogin.avif')",
         bgSize: "cover",
         bgPosition: "center",
         filter: "blur(2px) brightness(0.7)",
@@ -69,7 +122,7 @@ export default function LoginForm() {
         <Stack spacing={6} align="center" mb={6}>
           <Image
             boxSize="70px"
-            src="/logo.jpg" // ✅ Logo from public folder
+            src="/logo.jpg"
             alt="ClaudeBox Logo"
             objectFit="contain"
             borderRadius="full"
@@ -179,6 +232,8 @@ export default function LoginForm() {
                 boxShadow: "lg",
               }}
               transition="all 0.2s"
+              isLoading={isLoading}
+              loadingText="Signing in..."
             >
               Sign In
             </Button>

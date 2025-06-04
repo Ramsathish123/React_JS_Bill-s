@@ -86,8 +86,8 @@ const Stock = () => {
   return (
     <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
       <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
-        <Heading fontSize={{ base: "2xl", md: "3xl" }} color="blue.600">
-          📦 Stock Details
+        <Heading fontSize={{ base: "md", md: "xl" }} color="blue.600" fontFamily={"'Poppins', sans-serif"}>
+          Stock Details
         </Heading>
         <Flex gap={2} flexWrap="wrap">
           <Button colorScheme="gray" variant="outline">
