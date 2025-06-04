@@ -110,7 +110,7 @@ const Service = () => {
   return (
     <Box p={{ base: 4, md: 6 }} bg={useColorModeValue("gray.50", "gray.900")} minH="100vh">
       <Flex justify="space-between" align="center" mb={8}>
-        <Heading size="xl" fontWeight="semibold" color="blue.600">
+        <Heading size="md" fontWeight="semibold" color="blue.600" fontFamily="'Poppins', sans-serif">
           Device Services
         </Heading>
         <Button

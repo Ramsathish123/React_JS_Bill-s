@@ -23,10 +23,10 @@ function App() {
         {/* Layout route with nested content */}
         <Route path="/" element={<LeftMenu />}>
           <Route path="stock" element={<Stock />} />
-           <Route path="expense" element={<Expense />} />
-            <Route path="service" element={<Service />} />
-             <Route path="dashboard" element={<Dashboard />} />
-             <Route path="invoice" element={<Invoice />} />
+          <Route path="expense" element={<Expense />} />
+          <Route path="service" element={<Service />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="invoice" element={<Invoice />} />
         </Route>
       </Routes>
     </Router>

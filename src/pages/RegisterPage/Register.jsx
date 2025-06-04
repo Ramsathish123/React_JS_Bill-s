@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,10 +41,32 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Inside your Register component
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register form submitted:", formData);
-    navigate("/dashboard");
+
+    const { first, email, mobile, address, password } = formData;
+
+    if (!first || !email || !mobile || !address || !password) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/register", {
+        first,
+        email,
+        mobile,
+        address,
+        password, // ✔️ Password saved in plain text as requested
+      });
+
+      alert(response.data.message); // Show success message
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert(error.response?.data?.message || "Registration failed");
+    }
   };
 
   const inputStyles = {
@@ -135,8 +158,6 @@ export default function Register() {
               />
             </FormControl>
 
-
-
             <FormControl id="email" isRequired>
               <FormLabel color={useColorModeValue("blue.700", "blue.200")}>
                 Email address
@@ -206,7 +227,7 @@ export default function Register() {
               </InputGroup>
             </FormControl>
 
-            <FormControl id="confirmPassword" isRequired>
+            {/* <FormControl id="confirmPassword" isRequired>
               <FormLabel color={useColorModeValue("blue.700", "blue.200")}>
                 Confirm Password
               </FormLabel>
@@ -232,7 +253,7 @@ export default function Register() {
                   </Button>
                 </InputRightElement>
               </InputGroup>
-            </FormControl>
+            </FormControl> */}
 
             <Button
               type="submit"

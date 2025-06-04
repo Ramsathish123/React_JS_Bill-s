@@ -23,6 +23,9 @@ import {
   FormLabel,
   useColorModeValue,
   Stack,
+  Card,
+  CardHeader,
+  CardBody,
 } from "@chakra-ui/react";
 import { FiTrash2, FiPlus } from "react-icons/fi";
 import { useState } from "react";
@@ -70,7 +73,13 @@ const Stock = () => {
     )}`;
     setStockItems((items) => [
       ...items,
-      { ...newItem, id: itemId, rate: Number(newItem.rate), qty: Number(newItem.qty), availableQty: Number(newItem.availableQty) },
+      {
+        ...newItem,
+        id: itemId,
+        rate: Number(newItem.rate),
+        qty: Number(newItem.qty),
+        availableQty: Number(newItem.availableQty),
+      },
     ]);
     setNewItem({ name: "", rate: "", qty: "", availableQty: "" });
     onClose();
@@ -84,16 +93,29 @@ const Stock = () => {
   const bg = useColorModeValue("white", "gray.800");
 
   return (
-    <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
+    <Box
+      p={{ base: 4, md: 8 }}
+      minH="100vh"
+      bg={useColorModeValue("gray.50", "gray.900")}
+    >
       <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
-        <Heading fontSize={{ base: "2xl", md: "3xl" }} color="blue.600">
-          📦 Stock Details
+        <Heading
+          fontSize={{ base: "md", md: "xl" }}
+          color="blue.600"
+          fontFamily={"'Poppins', sans-serif"}
+        >
+          Stock Details
         </Heading>
         <Flex gap={2} flexWrap="wrap">
           <Button colorScheme="gray" variant="outline">
             Export PDF
           </Button>
-          <Button colorScheme="blue" variant="solid" onClick={onOpen} leftIcon={<FiPlus />}>
+          <Button
+            colorScheme="blue"
+            variant="solid"
+            onClick={onOpen}
+            leftIcon={<FiPlus />}
+          >
             Add Stock
           </Button>
           <Button colorScheme="blue" variant="ghost">
@@ -119,43 +141,66 @@ const Stock = () => {
         boxShadow="md"
         w="full"
       >
-        <Table variant="simple" size="md">
-          <Thead bg={useColorModeValue("gray.100", "gray.700")}>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Product Name</Th>
-              <Th isNumeric>Rate (₹)</Th>
-              <Th isNumeric>Total Qty</Th>
-              <Th isNumeric>Available Qty</Th>
-              <Th textAlign="center">Action</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {stockItems.map((item) => (
-              <Tr
-                key={item.id}
-                _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}
-              >
-                <Td fontWeight="bold" color="blue.500" whiteSpace="nowrap">
-                  {item.id}
-                </Td>
-                <Td whiteSpace="nowrap">{item.name}</Td>
-                <Td isNumeric>₹{item.rate}</Td>
-                <Td isNumeric>{item.qty}</Td>
-                <Td isNumeric>{item.availableQty}</Td>
-                <Td textAlign="center">
-                  <IconButton
-                    icon={<FiTrash2 />}
-                    aria-label="Delete"
-                    colorScheme="red"
-                    size="sm"
-                    onClick={() => handleDelete(item.id)}
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
+        <Card
+          bg={useColorModeValue("white", "gray.800")}
+          borderRadius="xl"
+          boxShadow="sm"
+          borderWidth="1px"
+          borderColor={useColorModeValue("gray.200", "gray.700")}
+          overflow="hidden"
+        >
+          <CardHeader
+            borderBottomWidth="1px"
+            borderColor={useColorModeValue("gray.200", "gray.700")}
+          >
+            <Heading size="md">Stock Inventory</Heading>
+          </CardHeader>
+          <CardBody px={0}>
+            <Box overflowX="auto">
+              <Table variant="simple" size="md">
+                <Thead bg={useColorModeValue("blue.50", "blue.900")}>
+                  <Tr>
+                    <Th>ID</Th>
+                    <Th>Product Name</Th>
+                    <Th isNumeric>Rate (₹)</Th>
+                    <Th isNumeric>Total Qty</Th>
+                    <Th isNumeric>Available Qty</Th>
+                    <Th textAlign="center">Action</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {stockItems.map((item) => (
+                    <Tr
+                      key={item.id}
+                      _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}
+                    >
+                      <Td
+                        fontWeight="bold"
+                        color="blue.500"
+                        whiteSpace="nowrap"
+                      >
+                        {item.id}
+                      </Td>
+                      <Td whiteSpace="nowrap">{item.name}</Td>
+                      <Td isNumeric>₹{item.rate}</Td>
+                      <Td isNumeric>{item.qty}</Td>
+                      <Td isNumeric>{item.availableQty}</Td>
+                      <Td textAlign="center">
+                        <IconButton
+                          icon={<FiTrash2 />}
+                          aria-label="Delete"
+                          colorScheme="red"
+                          size="sm"
+                          onClick={() => handleDelete(item.id)}
+                        />
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Box>
+          </CardBody>
+        </Card>
       </Box>
 
       {/* Add Stock Modal */}
