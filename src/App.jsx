@@ -9,6 +9,7 @@ import LeftMenu from "./pages/Menu/LeftMenu";
 import Dashboard from "./pages/dashboard/dashboard";
 import Stock from "./pages/Stock/Stock";
 import Expense from "./pages/Expense/Expense";
+import Service from "./pages/Service/Service";
 
 function App() {
   return (
@@ -20,8 +21,10 @@ function App() {
 
         {/* Layout route with nested content */}
         <Route path="/" element={<LeftMenu />}>
-          <Route path="Stock" element={<Expense />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="stock" element={<Stock />} />
+           <Route path="expense" element={<Expense />} />
+            <Route path="service" element={<Service />} />
+             <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>
