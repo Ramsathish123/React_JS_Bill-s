@@ -21,6 +21,7 @@ function App() {
         {/* Layout route with nested content */}
         <Route path="/" element={<LeftMenu />}>
           <Route path="Stock" element={<Expense />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>

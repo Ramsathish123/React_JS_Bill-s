@@ -29,7 +29,7 @@ export default function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login submitted:", { email, password, rememberMe });
-    navigate("/dashboard");
+    navigate("/stock");
   };
 
   return (

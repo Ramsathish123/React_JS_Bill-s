@@ -1,23 +1,42 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
-  Box, Flex, IconButton, useBreakpointValue, VStack, Link, Text, Icon, Button, useDisclosure
-} from '@chakra-ui/react';
+  Box,
+  Flex,
+  IconButton,
+  useBreakpointValue,
+  VStack,
+  Link,
+  Text,
+  Icon,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 import {
-  FiMenu, FiX, FiHome, FiUser, FiSettings, FiMail, FiHelpCircle, FiChevronLeft, FiChevronRight
-} from 'react-icons/fi';
-import { Outlet, Link as RouterLink } from 'react-router-dom';
+  FiMenu,
+  FiX,
+  FiHome,
+  FiUser,
+  FiSettings,
+  FiMail,
+  FiHelpCircle,
+  FiChevronLeft,
+  FiChevronRight,
+} from "react-icons/fi";
+import { Outlet, Link as RouterLink } from "react-router-dom";
+import Header from "../Header/Header";
 
 const LeftMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
-  const { isOpen: isMobileMenuOpen, onToggle: toggleMobileMenu } = useDisclosure();
+  const { isOpen: isMobileMenuOpen, onToggle: toggleMobileMenu } =
+    useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   const menuItems = [
-    { icon: FiHome, label: 'Home', href: '/dashboard' },
-    { icon: FiUser, label: 'Profile', href: '/profile' },
-    { icon: FiMail, label: 'Messages', href: '/messages' },
-    { icon: FiSettings, label: 'Settings', href: '/settings' },
-    { icon: FiHelpCircle, label: 'Help', href: '/help' },
+    { icon: FiHome, label: "Home", href: "/dashboard" },
+    { icon: FiUser, label: "Profile", href: "/profile" },
+    { icon: FiMail, label: "Messages", href: "/messages" },
+    { icon: FiSettings, label: "Settings", href: "/settings" },
+    { icon: FiHelpCircle, label: "Help", href: "/help" },
   ];
 
   const toggleMenu = () => {
@@ -57,7 +76,13 @@ const LeftMenu = () => {
         zIndex="sticky"
         w={isMobile ? "250px" : isMenuOpen ? "250px" : "80px"}
         transition="all 0.3s ease"
-        transform={isMobile ? (isMobileMenuOpen ? "translateX(0)" : "translateX(-100%)") : "translateX(0)"}
+        transform={
+          isMobile
+            ? isMobileMenuOpen
+              ? "translateX(0)"
+              : "translateX(-100%)"
+            : "translateX(0)"
+        }
       >
         <Flex direction="column" h="full" p={4} overflowY="auto">
           {!isMobile && (
@@ -68,14 +93,21 @@ const LeftMenu = () => {
               alignSelf="flex-end"
               mb={4}
               p={2}
-              _hover={{ bg: 'gray.700' }}
+              _hover={{ bg: "gray.700" }}
               aria-label={isMenuOpen ? "Collapse menu" : "Expand menu"}
             >
-              {isMenuOpen ? <FiChevronLeft size={20} /> : <FiChevronRight size={20} />}
+              {isMenuOpen ? (
+                <FiChevronLeft size={20} />
+              ) : (
+                <FiChevronRight size={20} />
+              )}
             </Button>
           )}
 
-          <VStack align={isMenuOpen || isMobile ? "flex-start" : "center"} spacing={4}>
+          <VStack
+            align={isMenuOpen || isMobile ? "flex-start" : "center"}
+            spacing={4}
+          >
             {menuItems.map((item, index) => (
               <Link
                 as={RouterLink}
@@ -86,11 +118,17 @@ const LeftMenu = () => {
                 p={2}
                 borderRadius="md"
                 w="full"
-                _hover={{ bg: 'gray.700', textDecoration: 'none' }}
+                _hover={{ bg: "gray.700", textDecoration: "none" }}
               >
                 <Icon as={item.icon} boxSize={5} />
                 {(isMenuOpen || isMobile) && (
-                  <Text ml={3} display={{ base: 'block', md: isMenuOpen ? 'block' : 'none' }}>
+                  <Text
+                    ml={3}
+                    display={{
+                      base: "block",
+                      md: isMenuOpen ? "block" : "none",
+                    }}
+                  >
                     {item.label}
                   </Text>
                 )}
@@ -101,12 +139,8 @@ const LeftMenu = () => {
       </Box>
 
       {/* Main Content */}
-      <Box
-        flex="1"
-        transition="margin-left 0.3s ease"
-        p={4}
-        overflowY="auto"
-      >
+      <Box flex="1" transition="margin-left 0.3s ease"  overflowY="auto">
+        <Header />
         <Outlet />
       </Box>
     </Flex>
