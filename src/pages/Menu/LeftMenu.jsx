@@ -14,9 +14,9 @@ const LeftMenu = () => {
 
   const menuItems = [
     { icon: FiHome, label: 'Home', href: '/dashboard' },
-    { icon: FiUser, label: 'Profile', href: '/profile' },
-    { icon: FiMail, label: 'Messages', href: '/messages' },
-    { icon: FiSettings, label: 'Settings', href: '/settings' },
+    { icon: FiUser, label: 'Service', href: '/service' },
+    { icon: FiMail, label: 'Stock', href: '/stock' },
+    { icon: FiSettings, label: 'Expense', href: '/expense' },
     { icon: FiHelpCircle, label: 'Help', href: '/help' },
   ];
 
