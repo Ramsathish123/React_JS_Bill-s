@@ -14,7 +14,7 @@ function App() {
       <Routes>
         {/* Standalone routes */}
         <Route path="/" element={<LoginForm />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/reg" element={<Register />} />
 
         {/* Layout route with nested content */}
         <Route path="/" element={<LeftMenu />}>
