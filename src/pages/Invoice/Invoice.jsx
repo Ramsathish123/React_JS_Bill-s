@@ -1,5 +1,19 @@
 import {
-  Box, Button, Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, VStack, HStack, Text
+  Box,
+  Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Input,
+  IconButton,
+  VStack,
+  HStack,
+  Text,
+  useColorModeValue,
+  Flex,
 } from "@chakra-ui/react";
 import { FiTrash2 } from "react-icons/fi";
 import { useEffect, useRef, useState } from "react";
@@ -28,13 +42,11 @@ const Invoice = () => {
     const updated = [...rows];
     updated[index][field] = value;
 
-    // Autofill from DB
     if (field === "productId" && productDB[value]) {
       updated[index].productName = productDB[value].name;
       updated[index].rate = productDB[value].rate;
     }
 
-    // Amount calculation
     const rate = parseFloat(updated[index].rate);
     const quantity = parseFloat(updated[index].quantity);
     if (!isNaN(rate) && !isNaN(quantity)) {
@@ -43,14 +55,11 @@ const Invoice = () => {
 
     setRows(updated);
 
-    // Focus quantity if productId is filled
     if (field === "productId" && productDB[value]) {
       setTimeout(() => quantityRefs.current[index]?.focus(), 0);
     }
 
-    // Move to next row's productId if quantity entered
     if (field === "quantity" && value) {
-      // Add new row if at last index
       if (index === rows.length - 1) {
         setRows([
           ...updated,
@@ -78,71 +87,91 @@ const Invoice = () => {
 
   const totalAmount = rows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
 
+  const bgCard = useColorModeValue("white", "gray.800");
+  const borderCard = useColorModeValue("gray.200", "gray.700");
+
   return (
-    <Box p={6}>
-      <Box fontSize="xl" mb={4} fontWeight="bold">
-        Create Invoice
+    <Box p={[4, 6]} w="full">
+      <Box
+        maxW="100%"
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow="hidden"
+        bg={bgCard}
+        borderColor={borderCard}
+        p={[4, 6]}
+        boxShadow="md"
+      >
+        <Text fontSize="2xl" fontWeight="bold" mb={6}>
+          Create Invoice
+        </Text>
+
+        <Box overflowX="auto">
+          <Table variant="striped" size="sm" colorScheme="gray">
+            <Thead bg="gray.100">
+              <Tr>
+                <Th>Product ID</Th>
+                <Th>Product Name</Th>
+                <Th>Rate</Th>
+                <Th>Quantity</Th>
+                <Th>Amount</Th>
+                <Th>Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((row, index) => (
+                <Tr key={index}>
+                  <Td>
+                    <Input
+                      ref={(el) => (productRefs.current[index] = el)}
+                      value={row.productId}
+                      onChange={(e) => handleInputChange(index, "productId", e.target.value)}
+                      placeholder="Enter ID"
+                      size="sm"
+                    />
+                  </Td>
+                  <Td>
+                    <Input value={row.productName} isReadOnly size="sm" />
+                  </Td>
+                  <Td>
+                    <Input value={row.rate} isReadOnly size="sm" />
+                  </Td>
+                  <Td>
+                    <Input
+                      ref={(el) => (quantityRefs.current[index] = el)}
+                      value={row.quantity}
+                      onChange={(e) => handleInputChange(index, "quantity", e.target.value)}
+                      placeholder="Qty"
+                      size="sm"
+                    />
+                  </Td>
+                  <Td>
+                    <Input value={row.amount} isReadOnly size="sm" />
+                  </Td>
+                  <Td>
+                    <IconButton
+                      icon={<FiTrash2 />}
+                      onClick={() => handleRemove(index)}
+                      size="sm"
+                      aria-label="Remove row"
+                      colorScheme="red"
+                    />
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </Box>
+
+        <Flex justify="space-between" mt={6} flexWrap="wrap" gap={4}>
+          <Text fontSize="lg" fontWeight="semibold">
+            Total: ₹{totalAmount.toFixed(2)}
+          </Text>
+          <Button colorScheme="blue" px={6}>
+            Save Invoice
+          </Button>
+        </Flex>
       </Box>
-
-      <Table variant="simple" size="sm">
-        <Thead bg="gray.100">
-          <Tr>
-            <Th>Product ID</Th>
-            <Th>Product Name</Th>
-            <Th>Rate</Th>
-            <Th>Quantity</Th>
-            <Th>Amount</Th>
-            <Th>Action</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {rows.map((row, index) => (
-            <Tr key={index}>
-              <Td>
-                <Input
-                  ref={(el) => (productRefs.current[index] = el)}
-                  value={row.productId}
-                  onChange={(e) => handleInputChange(index, "productId", e.target.value)}
-                  placeholder="Enter ID"
-                />
-              </Td>
-              <Td>
-                <Input value={row.productName} isReadOnly />
-              </Td>
-              <Td>
-                <Input value={row.rate} isReadOnly />
-              </Td>
-              <Td>
-                <Input
-                  ref={(el) => (quantityRefs.current[index] = el)}
-                  value={row.quantity}
-                  onChange={(e) => handleInputChange(index, "quantity", e.target.value)}
-                  placeholder="Qty"
-                />
-              </Td>
-              <Td>
-                <Input value={row.amount} isReadOnly />
-              </Td>
-              <Td>
-                <IconButton
-                  icon={<FiTrash2 />}
-                  onClick={() => handleRemove(index)}
-                  size="sm"
-                  aria-label="Remove row"
-                />
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-
-      <HStack justify="flex-end" mt={4}>
-        <Text fontWeight="bold">Total: ₹{totalAmount.toFixed(2)}</Text>
-      </HStack>
-
-      <VStack align="end" mt={4}>
-        <Button colorScheme="blue">Save Invoice</Button>
-      </VStack>
     </Box>
   );
 };

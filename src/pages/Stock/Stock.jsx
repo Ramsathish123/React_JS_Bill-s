@@ -18,10 +18,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalFooter,
   FormControl,
   FormLabel,
+  useColorModeValue,
+  Stack,
 } from "@chakra-ui/react";
-import { FiTrash2 } from "react-icons/fi";
+import { FiTrash2, FiPlus } from "react-icons/fi";
 import { useState } from "react";
 
 const Stock = () => {
@@ -50,54 +53,97 @@ const Stock = () => {
     },
   ]);
 
+  const [newItem, setNewItem] = useState({
+    name: "",
+    rate: "",
+    qty: "",
+    availableQty: "",
+  });
+
   const handleDelete = (id) => {
     setStockItems((items) => items.filter((item) => item.id !== id));
   };
 
+  const handleAdd = () => {
+    const itemId = `${newItem.name.slice(0, 2).toUpperCase()}${Math.floor(
+      Math.random() * 1000
+    )}`;
+    setStockItems((items) => [
+      ...items,
+      { ...newItem, id: itemId, rate: Number(newItem.rate), qty: Number(newItem.qty), availableQty: Number(newItem.availableQty) },
+    ]);
+    setNewItem({ name: "", rate: "", qty: "", availableQty: "" });
+    onClose();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const bg = useColorModeValue("white", "gray.800");
+
   return (
-    <Box p={4} w="100%">
-      <Flex justify="space-between" align="center" mb={4}>
-        <Heading size="md">Stock Details</Heading>
-        <Flex gap={2}>
-          <Button colorScheme="gray">PDF</Button>
-          <Button colorScheme="blue" onClick={onOpen}>
-            Add
+    <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue("gray.50", "gray.900")}>
+      <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
+        <Heading fontSize={{ base: "2xl", md: "3xl" }} color="blue.600">
+          📦 Stock Details
+        </Heading>
+        <Flex gap={2} flexWrap="wrap">
+          <Button colorScheme="gray" variant="outline">
+            Export PDF
           </Button>
-          <Button colorScheme="blue">Upload</Button>
+          <Button colorScheme="blue" variant="solid" onClick={onOpen} leftIcon={<FiPlus />}>
+            Add Stock
+          </Button>
+          <Button colorScheme="blue" variant="ghost">
+            Upload
+          </Button>
         </Flex>
       </Flex>
 
-      <Flex justify="flex-end" mb={3}>
-        <Input placeholder="Search..." maxW="250px" />
+      <Flex justify="flex-end" mb={4}>
+        <Input
+          placeholder="Search product..."
+          maxW="250px"
+          borderRadius="lg"
+          boxShadow="sm"
+        />
       </Flex>
 
-      <Box overflowX="auto">
-        <Table variant="striped" colorScheme="gray">
-          <Thead bg="gray.100">
+      <Box
+        bg={bg}
+        borderRadius="xl"
+        p={4}
+        overflowX="auto"
+        boxShadow="md"
+        w="full"
+      >
+        <Table variant="simple" size="md">
+          <Thead bg={useColorModeValue("gray.100", "gray.700")}>
             <Tr>
-              <Th>ProductID</Th>
-              <Th>ProductName</Th>
-              <Th>Rate</Th>
-              <Th>Quantity</Th>
-              <Th>Available Quantity</Th>
-              <Th>Action</Th>
+              <Th>ID</Th>
+              <Th>Product Name</Th>
+              <Th isNumeric>Rate (₹)</Th>
+              <Th isNumeric>Total Qty</Th>
+              <Th isNumeric>Available Qty</Th>
+              <Th textAlign="center">Action</Th>
             </Tr>
           </Thead>
           <Tbody>
             {stockItems.map((item) => (
-              <Tr key={item.id}>
-                <Td
-                  color="blue.500"
-                  textDecoration="underline"
-                  cursor="pointer"
-                >
+              <Tr
+                key={item.id}
+                _hover={{ bg: useColorModeValue("gray.50", "gray.700") }}
+              >
+                <Td fontWeight="bold" color="blue.500" whiteSpace="nowrap">
                   {item.id}
                 </Td>
-                <Td>{item.name}</Td>
-                <Td>{item.rate}</Td>
-                <Td>{item.qty}</Td>
-                <Td>{item.availableQty}</Td>
-                <Td>
+                <Td whiteSpace="nowrap">{item.name}</Td>
+                <Td isNumeric>₹{item.rate}</Td>
+                <Td isNumeric>{item.qty}</Td>
+                <Td isNumeric>{item.availableQty}</Td>
+                <Td textAlign="center">
                   <IconButton
                     icon={<FiTrash2 />}
                     aria-label="Delete"
@@ -112,37 +158,67 @@ const Stock = () => {
         </Table>
       </Box>
 
-      {/* Modal for Add Stock */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* Add Stock Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} size="md" isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add New Stock</ModalHeader>
+        <ModalContent borderRadius="xl">
+          <ModalHeader>Add New Stock Item</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl mb={3}>
-              <FormLabel>Product Name</FormLabel>
-              <Input />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Rate</FormLabel>
-              <Input type="number" />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Quantity</FormLabel>
-              <Input type="number" />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>GST (%)</FormLabel>
-              <Input type="number" />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Available Quantity</FormLabel>
-              <Input type="number" />
-            </FormControl>
-            <Button colorScheme="blue" mt={4} w="full" onClick={onClose}>
+            <Stack spacing={4}>
+              <FormControl>
+                <FormLabel>Product Name</FormLabel>
+                <Input
+                  name="name"
+                  value={newItem.name}
+                  onChange={handleChange}
+                  placeholder="Enter product name"
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Rate (₹)</FormLabel>
+                <Input
+                  type="number"
+                  name="rate"
+                  value={newItem.rate}
+                  onChange={handleChange}
+                  placeholder="Enter rate"
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Total Quantity</FormLabel>
+                <Input
+                  type="number"
+                  name="qty"
+                  value={newItem.qty}
+                  onChange={handleChange}
+                  placeholder="Enter total quantity"
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Available Quantity</FormLabel>
+                <Input
+                  type="number"
+                  name="availableQty"
+                  value={newItem.availableQty}
+                  onChange={handleChange}
+                  placeholder="Enter available quantity"
+                />
+              </FormControl>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue" onClick={handleAdd}>
               Save
             </Button>
-          </ModalBody>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </Box>

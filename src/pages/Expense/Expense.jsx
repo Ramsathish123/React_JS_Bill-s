@@ -1,7 +1,27 @@
 import {
-  Box, Button, Flex, Heading, Input, Table, Tbody, Td, Th, Thead, Tr,
-  useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader,
-  ModalBody, ModalFooter, ModalCloseButton, FormControl, FormLabel
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -17,7 +37,7 @@ const Expense = () => {
   const handleAddExpense = () => {
     setExpenses(prev => [
       ...prev,
-      { id: Date.now(), invoiceNo, detail, amount }
+      { id: Date.now(), invoiceNo, detail, amount: parseFloat(amount) }
     ]);
     setInvoiceNo('');
     setDetail('');
@@ -26,79 +46,127 @@ const Expense = () => {
   };
 
   const handleSearch = () => {
-    // You can apply date-range filtering logic here if needed.
+    // You can implement filtering based on fromDate and toDate
     console.log('Searching between:', fromDate, toDate);
   };
 
+  const tableBg = useColorModeValue('white', 'gray.800');
+
   return (
-    <Box p={4}>
-      <Flex justify="space-between" align="center" mb={4}>
-        <Heading size="md">Expense</Heading>
-        <Button colorScheme="blue" onClick={onOpen}>Add</Button>
+    <Box p={{ base: 4, md: 8 }} minH="100vh" bg={useColorModeValue('gray.50', 'gray.900')}>
+      {/* Header and Add Button */}
+      <Flex justify="space-between" align="center" mb={6} wrap="wrap" gap={4}>
+        <Heading fontSize={{ base: '2xl', md: '3xl' }} color="blue.600">
+          Expense Tracker
+        </Heading>
+        <Button colorScheme="blue" onClick={onOpen}>
+          Add Expense
+        </Button>
       </Flex>
 
-      <Flex gap={4} mb={4} flexWrap="wrap">
+      {/* Search Filters */}
+      <Flex
+        gap={4}
+        mb={6}
+        flexWrap="wrap"
+        align="center"
+        justify={{ base: 'flex-start', md: 'flex-start' }}
+      >
         <Input
           type="date"
-          placeholder="From Date"
           value={fromDate}
           onChange={e => setFromDate(e.target.value)}
           maxW="200px"
         />
         <Input
           type="date"
-          placeholder="To Date"
           value={toDate}
           onChange={e => setToDate(e.target.value)}
           maxW="200px"
         />
-        <Button onClick={handleSearch} colorScheme="teal">Search</Button>
+        <Button onClick={handleSearch} colorScheme="teal">
+          Search
+        </Button>
       </Flex>
 
-      <Box overflowX="auto">
-        <Table variant="striped" colorScheme="gray">
-          <Thead>
+      {/* Expense Table */}
+      <Box
+        bg={tableBg}
+        p={4}
+        rounded="xl"
+        shadow="md"
+        overflowX="auto"
+      >
+        <Table variant="simple" size="md">
+          <Thead bg={useColorModeValue('gray.100', 'gray.700')}>
             <Tr>
               <Th>Invoice No</Th>
-              <Th>Detail</Th>
-              <Th isNumeric>Amount</Th>
+              <Th>Description</Th>
+              <Th isNumeric>Amount (₹)</Th>
             </Tr>
           </Thead>
           <Tbody>
             {expenses.map(item => (
-              <Tr key={item.id}>
+              <Tr
+                key={item.id}
+                _hover={{ bg: useColorModeValue('gray.50', 'gray.700') }}
+              >
                 <Td>{item.invoiceNo}</Td>
                 <Td>{item.detail}</Td>
-                <Td isNumeric>₹{item.amount}</Td>
+                <Td isNumeric>₹{item.amount.toFixed(2)}</Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
+        {expenses.length === 0 && (
+          <Box textAlign="center" py={6} fontStyle="italic" color="gray.500">
+            No expenses recorded.
+          </Box>
+        )}
       </Box>
 
-      {/* Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* Add Expense Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="md">
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Expense</ModalHeader>
+        <ModalContent borderRadius="lg">
+          <ModalHeader>Add New Expense</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl mb={3}>
-              <FormLabel>Invoice No</FormLabel>
-              <Input value={invoiceNo} onChange={e => setInvoiceNo(e.target.value)} />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Detail</FormLabel>
-              <Input value={detail} onChange={e => setDetail(e.target.value)} />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>Amount</FormLabel>
-              <Input type="number" value={amount} onChange={e => setAmount(e.target.value)} />
-            </FormControl>
+            <Stack spacing={4}>
+              <FormControl>
+                <FormLabel>Invoice No</FormLabel>
+                <Input
+                  value={invoiceNo}
+                  onChange={e => setInvoiceNo(e.target.value)}
+                  placeholder="Enter invoice number"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Detail</FormLabel>
+                <Input
+                  value={detail}
+                  onChange={e => setDetail(e.target.value)}
+                  placeholder="Enter description"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Amount (₹)</FormLabel>
+                <Input
+                  type="number"
+                  value={amount}
+                  onChange={e => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                />
+              </FormControl>
+            </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleAddExpense}>Add</Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue" onClick={handleAddExpense}>
+              Save
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
